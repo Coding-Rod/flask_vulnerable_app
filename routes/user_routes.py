@@ -75,13 +75,13 @@ def login():
         email = request.json.get('email')
         password = request.json.get('password')
         
-        user = login_user(email, password)
+        user = login_user(email, password) or 'No user found!'
         
         # if not user:
         #     return jsonify({'message': 'No user found!'}), 404
         
         # return jsonify({'user': user})
         
-        return jsonify({'message': 'User logged in successfully!'})
+        return jsonify({'message': user})
     except Exception as e:
         return jsonify({'message': str(e)}), 404

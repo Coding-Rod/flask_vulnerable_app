@@ -74,15 +74,21 @@ def login_user(email: str, password: str):
     
     # Using raw SQL
     
-    user = db.session.execute(
-        text("SELECT * FROM users WHERE email = :email AND password = :password"), 
-        {"email": email, "password": password}
-    ).fetchone()
+    query = f"SELECT * FROM users WHERE email = '{email}' AND password = '{password}'"
+    
+    user = db.session.execute(text(query)).fetchone()
     
     if not user:
         raise Exception("Incorrect email or password")
     
-    return user
+    user_data = {
+        'id': user.id or None,
+        'name': user.name or None,
+        'email': user.email or None,
+        'phone_number': user.phone_number or None
+    }
+    
+    return user_data
     
     # Using ORM
     # password = Encryptor.encrypt(password)
