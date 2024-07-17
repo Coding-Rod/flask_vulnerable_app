@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css">
+</head>
+<body style="background-color: #bcbda8;">
+    <div class="container">
+        <div class="card" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50%; border-radius: 10px; padding: 50px;">
+            <div class="card-body">
+                <h2>Login Form</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">email:</label>
+                        <input type="text" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.12.2/sweetalert2.min.js" integrity="sha512-JWPRTDebuCWNZTZP+EGSgPnO1zH4iie+/gEhIsuotQ2PCNxNiMfNLl97zPNjDVuLi9UWOj82DEtZFJnuOdiwZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            axios.post('{{ url_for("routes.user_routes.login") }}', {
+                email: email,
+                password: password
+            })
+            .then(function(response) {
+                window.location.href = '/'
+
+                // Handle success response
+                // const data = response.data;
+
+                //window.location.href = `/user/${data.user_id}`;
+            })
+            .catch(function(error) {
+                // Handle error response
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.response.data.message
+                });
+                console.error(error);
+            });
+        });
+    </script>
+</body>
+</html>
