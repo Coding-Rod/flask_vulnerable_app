@@ -39,12 +39,10 @@
                 password: password
             })
             .then(function(response) {
-                window.location.href = '/'
-
                 // Handle success response
-                // const data = response.data;
+                const data = response.data;
 
-                //window.location.href = `/user/${data.user_id}`;
+                window.location.href = `/user/${data.user_id}`;
             })
             .catch(function(error) {
                 // Handle error response

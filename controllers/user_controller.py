@@ -72,33 +72,21 @@ def delete_user(id: int):
 
 def login_user(email: str, password: str):
     
-    # Using raw SQL
+    # Using ORM
+    password = Encryptor.encrypt(password)
+    user = User.query.filter_by(email=email, password=password).first()
     
-    user = db.session.execute(
-        text("SELECT * FROM users WHERE email = :email AND password = :password"), 
-        {"email": email, "password": password}
-    ).fetchone()
     
     if not user:
-        raise Exception("Incorrect email or password")
+        return None
     
-    return user
-    
-    # Using ORM
-    # password = Encryptor.encrypt(password)
-    # user = User.query.filter_by(email=email, password=password).first()
-    
-    
-    # if not user:
-    #     return None
-    
-    # user_data = {
-    #     'name': user.name,
-    #     'email': user.email,
-    #     'phone_number': user
-    # }
+    user_data = {
+        'name': user.name,
+        'email': user.email,
+        'phone_number': user
+    }
     
     # Save the user's id in the session
-    # session['token'] = user.id
+    session['token'] = user.id
     
-    # return user_data
+    return user_data

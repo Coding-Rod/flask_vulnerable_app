@@ -77,11 +77,6 @@ def login():
         
         user = login_user(email, password)
         
-        # if not user:
-        #     return jsonify({'message': 'No user found!'}), 404
-        
-        # return jsonify({'user': user})
-        
-        return jsonify({'message': 'User logged in successfully!'})
+        return jsonify({'user_id': user.id})
     except Exception as e:
         return jsonify({'message': str(e)}), 404
