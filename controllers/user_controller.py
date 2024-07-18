@@ -1,9 +1,8 @@
 from flask import session
 from models.user_model import User
 from db.db import db
-from sqlalchemy import text
-
 from utils.encryptor import Encryptor
+from sqlalchemy.orm.exc import NoResultFound
 
 def get_all_users(limit: int = None, offset: int = None):
     users = User.query.limit(limit).offset(offset).all()
@@ -73,14 +72,16 @@ def delete_user(id: int):
 def login_user(email: str, password: str):
     
     # Using ORM
-    password = Encryptor.encrypt(password)
-    user = User.query.filter_by(email=email, password=password).first()
-    
-    
+    user = User.query.filter_by(email=email).first()
+
     if not user:
-        return None
+        raise NoResultFound('No user found!')
+    
+    if not Encryptor.compare_text(password, user.password):
+        raise NoResultFound('Password is incorrect!')
     
     user_data = {
+        'id': user.id,
         'name': user.name,
         'email': user.email,
         'phone_number': user

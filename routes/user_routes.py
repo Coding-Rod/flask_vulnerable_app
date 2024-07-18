@@ -1,4 +1,5 @@
 from flask import Blueprint, request, redirect, jsonify
+from sqlalchemy.orm.exc import NoResultFound
 from controllers.user_controller import (
     create_user,
     get_all_users,
@@ -77,6 +78,6 @@ def login():
         
         user = login_user(email, password)
         
-        return jsonify({'user_id': user.id})
-    except Exception as e:
+        return jsonify({'user_id': user['id']})
+    except NoResultFound as e:
         return jsonify({'message': str(e)}), 404
